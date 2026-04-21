@@ -19,9 +19,11 @@ export default function TimelinePage() {
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex items-center gap-4">
-           <Button variant="ghost" size="icon" asChild>
-             <Link href="/dashboard"><ArrowLeft className="w-5 h-5" /></Link>
-           </Button>
+           <Link href="/dashboard" tabIndex={-1}>
+             <Button variant="ghost" size="icon" tabIndex={0} aria-label="Back to Dashboard">
+               <ArrowLeft className="w-5 h-5" aria-hidden="true" />
+             </Button>
+           </Link>
            <div>
               <h1 className="text-3xl font-bold tracking-tight">Election Timeline</h1>
               <p className="text-muted-foreground">The journey of a democratic election.</p>

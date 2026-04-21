@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
-import { MapPin, User, FileCheck, CheckCircle2, ArrowRight } from "lucide-react";
+import { User, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function OnboardingPage() {
             <User className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Personalize Your Journey</h1>
-          <p className="text-muted-foreground mt-2">Let's tailor the election timeline to you.</p>
+          <p className="text-muted-foreground mt-2">Let&apos;s tailor the election timeline to you.</p>
         </div>
 
         <Card className="border-white/10 bg-white/5 backdrop-blur-md shadow-2xl p-2">
