@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
     unoptimized: process.env.BUILD_FOR_MOBILE === 'true',
   },
   typescript: { ignoreBuildErrors: false },
-  eslint: { ignoreDuringBuilds: false },
   turbopack: {},
   async headers() {
     return [
