@@ -92,7 +92,11 @@ export default function OnboardingPage() {
               <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-2">
                   <Label>State / Union Territory</Label>
-                  <Select onValueChange={(val) => setFormData({...formData, state: val})}>
+                  <Select
+                    onValueChange={(val) =>
+                      setFormData({ ...formData, state: val as string })
+                    }
+                  >
                     <SelectTrigger className="bg-background/50">
                       <SelectValue placeholder="Select State" />
                     </SelectTrigger>
