@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import OnboardingPage from '@/app/onboarding/page'
@@ -7,6 +8,21 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
   }),
+}))
+
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children, onClick, disabled }: any) => (
+    <button onClick={onClick} data-disabled={disabled}>{children}</button>
+  ),
+}))
+
+// Mock Select to be a simple select for testing
+vi.mock('@/components/ui/select', () => ({
+  Select: ({ children, onValueChange }: any) => <select onChange={(e) => onValueChange(e.target.value)}>{children}</select>,
+  SelectTrigger: ({ children }: any) => <div>{children}</div>,
+  SelectValue: ({ placeholder }: any) => <span>{placeholder}</span>,
+  SelectContent: ({ children }: any) => <div>{children}</div>,
+  SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
 }))
 
 test('OnboardingPage navigates through steps', () => {
@@ -26,6 +42,10 @@ test('OnboardingPage navigates through steps', () => {
   
   // Step 2: Location Info
   expect(screen.getByText('Location Info')).toBeInTheDocument()
+  
+  const stateSelect = screen.getByRole('combobox')
+  fireEvent.change(stateSelect, { target: { value: 'maharashtra' } })
+
   const constituencyInput = screen.getByPlaceholderText('E.g. Mumbai South')
   fireEvent.change(constituencyInput, { target: { value: 'Pune' } })
   
@@ -50,4 +70,11 @@ test('OnboardingPage navigates through steps', () => {
   
   const finishBtn = screen.getByText('Complete Profile')
   fireEvent.click(finishBtn) // triggers router.push
+})
+
+test('OnboardingPage handleBack at step 1', () => {
+  render(<OnboardingPage />)
+  const backBtn = screen.getByText('Back')
+  fireEvent.click(backBtn) 
+  expect(screen.getByText('Step 1 of 4')).toBeInTheDocument()
 })

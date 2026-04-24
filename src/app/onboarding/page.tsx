@@ -31,7 +31,8 @@ export default function OnboardingPage() {
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    if (step <= 1) return;
+    setStep(step - 1);
   };
 
   const currentProgress = (step / totalSteps) * 100;

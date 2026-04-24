@@ -28,12 +28,49 @@ test('SimulatorPage API chat binds properly', async () => {
   })
 })
 
+test('SimulatorPage handles API response without reply', async () => {
+  vi.mocked(global.fetch).mockResolvedValueOnce({
+    json: () => Promise.resolve({}), // No reply property
+  } as unknown as Response)
+
+  render(<SimulatorPage />)
+  
+  const input = screen.getByPlaceholderText('Ask about Form 6, VVPAT, etc...')
+  fireEvent.change(input, { target: { value: 'Empty Response' } })
+  fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' })
+  
+  await waitFor(() => {
+    expect(screen.getByText('No response.')).toBeInTheDocument()
+  })
+})
+
+test('SimulatorPage handles API error', async () => {
+  vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network error'))
+
+  render(<SimulatorPage />)
+  
+  const input = screen.getByPlaceholderText('Ask about Form 6, VVPAT, etc...')
+  fireEvent.change(input, { target: { value: 'Test Error' } })
+  fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' })
+  
+  await waitFor(() => {
+    expect(screen.getByText('Network error fetching AI response.')).toBeInTheDocument()
+  })
+})
+
+test('SimulatorPage handleSend with empty query', () => {
+  render(<SimulatorPage />)
+  const sendBtn = screen.getByLabelText('Send Query')
+  fireEvent.click(sendBtn)
+  // Should return early and not add to history (only initial message)
+  const messages = screen.getAllByText(/Hello! I am Electra/)
+  expect(messages.length).toBe(1)
+})
+
 test('SimulatorPage voting state flips correctly', () => {
   render(<SimulatorPage />)
   const buttons = screen.getAllByRole('button')
   
-  // The first 3 or 4 buttons are nav/etc, target a blue vote button.
-  // Using generic click on the third button (should be Candidate A's vote button)
   const candidateButton = buttons.find(b => b.className.includes('bg-blue-600'))
   if (candidateButton) {
     fireEvent.click(candidateButton)
